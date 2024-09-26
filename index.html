@@ -3,160 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive 1990s TV Quiz</title>
+    <title>ICONIC 90'S TV</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        * {
             margin: 0;
-            background-color: #0CC0DF;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            width: 40%;
-            max-width: 800px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            padding: 20px;
-        }
-        img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            cursor: pointer;
-            border: 5px solid #0CC0DF;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .qa-box {
-            margin-top: 20px;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
             text-align: center;
         }
-        .question {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
         }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
         .answer {
-            font-size: 1.2em;
-            color: #555;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img id="quizImage" src="https://i.imgur.com/sRXWFyp.png" alt="Quiz Image">
-        <div class="qa-box">
-            <div id="question" class="question">Click the image to get a question!</div>
-            <div id="answer" class="answer"></div>
-        </div>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="George Michael Logo">
+    <h1>ICONIC 90'S TV</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
     </div>
-    
-    <script>
-        const questionsAndAnswers = [
-            { question: "Which 1990s show followed the lives of six friends living in New York City?", answer: "'Friends' (1994-2004)" },
-            { question: "Who was the main character in 'The X-Files'?", answer: "Fox Mulder, played by David Duchovny" },
-            { question: "Which 1990s sitcom was set in Bel-Air, Los Angeles?", answer: "'The Fresh Prince of Bel-Air' (1990-1996)" },
-            { question: "What animated series featured characters named Beavis and Butt-Head?", answer: "'Beavis and Butt-Head' (1993-1997)" },
-            { question: "What was the name of the twin sisters in 'Sister, Sister'?", answer: "Tia and Tamera" },
-            { question: "Which 1990s show featured four women living in New York City and focused on their romantic lives?", answer: "'Sex and the City' (1998-2004)" },
-            { question: "In 'Buffy the Vampire Slayer', who played the character Buffy?", answer: "Sarah Michelle Gellar" },
-            { question: "What 1990s show was about teenagers living in Beverly Hills?", answer: "'Beverly Hills, 90210' (1990-2000)" },
-            { question: "Which show featured a stand-up comedian playing a fictional version of himself living in New York?", answer: "'Seinfeld' (1989-1998)" },
-            { question: "What was the name of the principal in 'Saved by the Bell'?", answer: "Mr. Belding" },
-            { question: "Which show followed the life of a single father raising three daughters in San Francisco?", answer: "'Full House' (1987-1995)" },
-            { question: "What 1990s sci-fi series starred Scott Bakula as a time traveler?", answer: "'Quantum Leap' (1989-1993)" },
-            { question: "Which 1990s sitcom was set at a radio station in Seattle?", answer: "'Frasier' (1993-2004)" },
-            { question: "What was the name of the character played by Will Smith in 'The Fresh Prince of Bel-Air'?", answer: "Will" },
-            { question: "Which show starred Jennifer Love Hewitt and followed a group of siblings raising themselves?", answer: "'Party of Five' (1994-2000)" },
-            { question: "What was the name of the theme song for 'Friends'?", answer: "'I'll Be There for You' by The Rembrandts" },
-            { question: "Which show featured the characters Doug Funnie, Patti Mayonnaise, and Skeeter?", answer: "'Doug' (1991-1999)" },
-            { question: "Who was the main antagonist in 'The X-Files'?", answer: "The Cigarette Smoking Man" },
-            { question: "Which 1990s series followed the life of Dawson Leery?", answer: "'Dawson's Creek' (1998-2003)" },
-            { question: "Which show starred Keri Russell as a college student?", answer: "'Felicity' (1998-2002)" },
-            { question: "Which show featured a dog named Wishbone?", answer: "'Wishbone' (1995-1998)" },
-            { question: "In which show did Tim Allen play a character named Tim 'The Toolman' Taylor?", answer: "'Home Improvement' (1991-1999)" },
-            { question: "Which animated series followed the lives of four boys in Colorado?", answer: "'South Park' (1997-present)" },
-            { question: "Which 1990s show was about teenagers living in a beachside California town?", answer: "'Baywatch' (1989-2001)" },
-            { question: "Which 1990s sitcom was about a father and son living with two women in Chicago?", answer: "'Step by Step' (1991-1998)" },
-            { question: "What was the name of the town in 'Twin Peaks'?", answer: "Twin Peaks" },
-            { question: "Which show featured Will, a genius kid who attended a university in Boston?", answer: "'Doogie Howser, M.D.' (1989-1993)" },
-            { question: "What 1990s sitcom starred Paul Reiser and Helen Hunt as a married couple?", answer: "'Mad About You' (1992-1999)" },
-            { question: "Which sitcom featured Ray Romano as a sportswriter living with his family?", answer: "'Everybody Loves Raymond' (1996-2005)" },
-            { question: "What was the name of the main character in 'Daria'?", answer: "Daria Morgendorffer" },
-            { question: "Which 1990s show followed the life of a teenage girl named Sabrina who had magical powers?", answer: "'Sabrina the Teenage Witch' (1996-2003)" },
-            { question: "In 'Boy Meets World', who was Cory Matthews' best friend?", answer: "Shawn Hunter" },
-            { question: "Which 1990s sitcom featured two brothers running a bar in Nantucket?", answer: "'Wings' (1990-1997)" },
-            { question: "Who played the character of Xena in 'Xena: Warrior Princess'?", answer: "Lucy Lawless" },
-            { question: "What was the setting for the show 'ER'?", answer: "A hospital in Chicago" },
-            { question: "Which 1990s show starred Sarah Jessica Parker as a New York City columnist?", answer: "'Sex and the City' (1998-2004)" },
-            { question: "Which 1990s cartoon featured characters named Yakko, Wakko, and Dot?", answer: "'Animaniacs' (1993-1998)" },
-            { question: "Which sitcom featured Fran Drescher as a nanny?", answer: "'The Nanny' (1993-1999)" },
-            { question: "Who played the character of Mulder's partner Dana Scully in 'The X-Files'?", answer: "Gillian Anderson" },
-            { question: "In 'Seinfeld', who was Jerry's eccentric neighbor?", answer: "Cosmo Kramer" },
-            { question: "Which 1990s teen sitcom starred Kenan Thompson and Kel Mitchell?", answer: "'Kenan & Kel' (1996-2000)" },
-            { question: "What was the first animated series produced by Nickelodeon in the 1990s?", answer: "'Rugrats' (1991-2004)" },
-            { question: "Which 1990s show starred Melissa Joan Hart as a teenage girl named Clarissa?", answer: "'Clarissa Explains It All' (1991-1994)" },
-            { question: "Which sitcom followed the life of a postal worker named Doug Heffernan?", answer: "'The King of Queens' (1998-2007)" },
-            { question: "Which 1990s show was set in an apartment building owned by Melrose Place?", answer: "'Melrose Place' (1992-1999)" },
-            { question: "Who was the central character in 'Ally McBeal'?", answer: "Ally McBeal, played by Calista Flockhart" },
-            { question: "In 'Friends', who did Ross marry three times?", answer: "Carol, Emily, and Rachel" },
-            { question: "Which 1990s drama series starred David Hasselhoff as a lifeguard?", answer: "'Baywatch' (1989-2001)" },
-            { question: "What was the last name of the family in 'Home Improvement'?", answer: "The Taylors" },
-            { question: "Which show starred John Lithgow as an alien on Earth?", answer: "'3rd Rock from the Sun' (1996-2001)" },
-            { question: "What was the name of the baby in 'Dinosaurs'?", answer: "Baby Sinclair" },
-            { question: "In 'ER', who played Dr. Doug Ross?", answer: "George Clooney" },
-            { question: "Which 1990s animated series featured a laboratory and a boy genius?", answer: "'Dexter's Laboratory' (1996-2003)" },
-            { question: "Which show featured the lives of two FBI agents investigating paranormal activities?", answer: "'The X-Files' (1993-2002)" },
-            { question: "Which actor starred in both 'Friends' and 'Episodes'?", answer: "Matt LeBlanc" },
-            { question: "What was the name of the high school in 'Saved by the Bell'?", answer: "Bayside High" },
-            { question: "Which show followed the adventures of a boy named Cory Matthews?", answer: "'Boy Meets World' (1993-2000)" },
-            { question: "In 'Buffy the Vampire Slayer', what was the name of Buffy's best friend?", answer: "Willow Rosenberg" },
-            { question: "Who played the character of Jack Bauer in '24'?", answer: "Kiefer Sutherland" },
-            { question: "Which show featured characters living in a Seattle radio station?", answer: "'Frasier' (1993-2004)" },
-            { question: "What was the theme song for 'Dawson's Creek'?", answer: "'I Don't Want to Wait' by Paula Cole" },
-            { question: "Who played the character of Chandler Bing in 'Friends'?", answer: "Matthew Perry" },
-            { question: "Which 1990s show featured characters like Tommy Pickles and Angelica?", answer: "'Rugrats' (1991-2004)" },
-            { question: "Which 1990s teen drama starred Claire Danes as Angela Chase?", answer: "'My So-Called Life' (1994-1995)" },
-            { question: "Which 1990s sitcom featured a bar named 'Cheers'?", answer: "'Cheers' (1982-1993)" },
-            { question: "Who played the character of Steve Urkel in 'Family Matters'?", answer: "Jaleel White" },
-            { question: "What was the name of the talking baby in 'Family Guy'?", answer: "Stewie Griffin" },
-            { question: "Which 1990s medical drama starred Anthony Edwards and Noah Wyle?", answer: "'ER' (1994-2009)" },
-            { question: "Which show featured Sabrina Spellman as a teenage witch?", answer: "'Sabrina the Teenage Witch' (1996-2003)" },
-            { question: "In 'Friends', what is Joey's favorite food?", answer: "Sandwiches" },
-            { question: "What was the name of Will's best friend in 'The Fresh Prince of Bel-Air'?", answer: "Jazz" },
-            { question: "Which 1990s show starred Tiffani Thiessen as a popular high school student?", answer: "'Saved by the Bell' (1989-1993)" },
-            { question: "Which 1990s animated series featured a cat and dog as roommates?", answer: "'CatDog' (1998-2005)" },
-            { question: "In 'The Simpsons', what is the name of the bar Homer frequents?", answer: "Moe's Tavern" },
-            { question: "Who played the character of Ally McBeal?", answer: "Calista Flockhart" },
-            { question: "Which 1990s show followed the misadventures of a wealthy Beverly Hills family?", answer: "'Beverly Hills, 90210' (1990-2000)" },
-            { question: "Which sitcom featured two brothers, Charlie and Alan Harper?", answer: "'Two and a Half Men' (2003-2015)" }
-        ];
+</div>
 
-        let currentQuestionIndex = -1;
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "Which 1990s show followed the lives of six friends living in New York City?", answer: "'Friends' (1994-2004)" },
+        { question: "Who was the main character in 'The X-Files'?", answer: "Fox Mulder, played by David Duchovny" },
+        { question: "Which 1990s sitcom was set in Bel-Air, Los Angeles?", answer: "'The Fresh Prince of Bel-Air' (1990-1996)" },
+        { question: "What animated series featured characters named Beavis and Butt-Head?", answer: "'Beavis and Butt-Head' (1993-1997)" },
+        { question: "What was the name of the twin sisters in 'Sister, Sister'?", answer: "Tia and Tamera" },
+        { question: "Which 1990s show featured four women living in New York City and focused on their romantic lives?", answer: "'Sex and the City' (1998-2004)" },
+        { question: "In 'Buffy the Vampire Slayer', who played the character Buffy?", answer: "Sarah Michelle Gellar" },
+        { question: "What 1990s show was about teenagers living in Beverly Hills?", answer: "'Beverly Hills, 90210' (1990-2000)" },
+        { question: "Which show featured a stand-up comedian playing a fictional version of himself living in New York?", answer: "'Seinfeld' (1989-1998)" },
+        { question: "What was the name of the principal in 'Saved by the Bell'?", answer: "Mr. Belding" },
+        { question: "Which show followed the life of a single father raising three daughters in San Francisco?", answer: "'Full House' (1987-1995)" },
+        { question: "What 1990s sci-fi series starred Scott Bakula as a time traveler?", answer: "'Quantum Leap' (1989-1993)" },
+        { question: "Which 1990s sitcom was set at a radio station in Seattle?", answer: "'Frasier' (1993-2004)" },
+        { question: "What was the name of the character played by Will Smith in 'The Fresh Prince of Bel-Air'?", answer: "Will" },
+        { question: "Which show starred Jennifer Love Hewitt and followed a group of siblings raising themselves?", answer: "'Party of Five' (1994-2000)" },
+        { question: "What was the name of the theme song for 'Friends'?", answer: "'I'll Be There for You' by The Rembrandts" },
+        { question: "Which show featured the characters Doug Funnie, Patti Mayonnaise, and Skeeter?", answer: "'Doug' (1991-1999)" },
+        { question: "Who was the main antagonist in 'The X-Files'?", answer: "The Cigarette Smoking Man" },
+        { question: "Which 1990s series followed the life of Dawson Leery?", answer: "'Dawson's Creek' (1998-2003)" },
+        { question: "Which show starred Keri Russell as a college student?", answer: "'Felicity' (1998-2002)" },
+        { question: "Which show featured a dog named Wishbone?", answer: "'Wishbone' (1995-1998)" },
+        { question: "In which show did Tim Allen play a character named Tim 'The Toolman' Taylor?", answer: "'Home Improvement' (1991-1999)" },
+        { question: "Which animated series followed the lives of four boys in Colorado?", answer: "'South Park' (1997-present)" },
+        { question: "Which 1990s show was about teenagers living in a beachside California town?", answer: "'Baywatch' (1989-2001)" },
+        { question: "Which 1990s sitcom was about a father and son living with two women in Chicago?", answer: "'Step by Step' (1991-1998)" },
+        { question: "What was the name of the town in 'Twin Peaks'?", answer: "Twin Peaks" },
+        { question: "Which show featured Will, a genius kid who attended a university in Boston?", answer: "'Doogie Howser, M.D.' (1989-1993)" },
+        { question: "What 1990s sitcom starred Paul Reiser and Helen Hunt as a married couple?", answer: "'Mad About You' (1992-1999)" },
+        { question: "Which sitcom featured Ray Romano as a sportswriter living with his family?", answer: "'Everybody Loves Raymond' (1996-2005)" },
+        { question: "What was the name of the main character in 'Daria'?", answer: "Daria Morgendorffer" },
+        { question: "Which 1990s show followed the life of a teenage girl named Sabrina who had magical powers?", answer: "'Sabrina the Teenage Witch' (1996-2003)" },
+        { question: "In 'Boy Meets World', who was Cory Matthews' best friend?", answer: "Shawn Hunter" },
+        { question: "Which 1990s sitcom featured two brothers running a bar in Nantucket?", answer: "'Wings' (1990-1997)" },
+        { question: "Who played the character of Xena in 'Xena: Warrior Princess'?", answer: "Lucy Lawless" },
+        { question: "What was the setting for the show 'ER'?", answer: "A hospital in Chicago" },
+        { question: "Which 1990s show starred Sarah Jessica Parker as a New York City columnist?", answer: "'Sex and the City' (1998-2004)" },
+        { question: "Which 1990s cartoon featured characters named Yakko, Wakko, and Dot?", answer: "'Animaniacs' (1993-1998)" },
+        { question: "Which sitcom featured Fran Drescher as a nanny?", answer: "'The Nanny' (1993-1999)" },
+        { question: "Who played the character of Mulder's partner Dana Scully in 'The X-Files'?", answer: "Gillian Anderson" },
+        { question: "In 'Seinfeld', who was Jerry's eccentric neighbor?", answer: "Cosmo Kramer" },
+        { question: "Which 1990s teen sitcom starred Kenan Thompson and Kel Mitchell?", answer: "'Kenan & Kel' (1996-2000)" },
+        { question: "What was the first animated series produced by Nickelodeon in the 1990s?", answer: "'Rugrats' (1991-2004)" },
+        { question: "Which 1990s show starred Melissa Joan Hart as a teenage girl named Clarissa?", answer: "'Clarissa Explains It All' (1991-1994)" },
+        { question: "Which sitcom followed the life of a postal worker named Doug Heffernan?", answer: "'The King of Queens' (1998-2007)" },
+        { question: "Which 1990s show was set in an apartment building owned by Melrose Place?", answer: "'Melrose Place' (1992-1999)" },
+        { question: "Who was the central character in 'Ally McBeal'?", answer: "Ally McBeal, played by Calista Flockhart" },
+        { question: "In 'Friends', who did Ross marry three times?", answer: "Carol, Emily, and Rachel" },
+        { question: "Which 1990s drama series starred David Hasselhoff as a lifeguard?", answer: "'Baywatch' (1989-2001)" },
+        { question: "What was the last name of the family in 'Home Improvement'?", answer: "The Taylors" },
+        { question: "Which show starred John Lithgow as an alien on Earth?", answer: "'3rd Rock from the Sun' (1996-2001)" },
+        { question: "What was the name of the baby in 'Dinosaurs'?", answer: "Baby Sinclair" },
+        { question: "In 'ER', who played Dr. Doug Ross?", answer: "George Clooney" },
+        { question: "Which 1990s animated series featured a laboratory and a boy genius?", answer: "'Dexter's Laboratory' (1996-2003)" },
+        { question: "Which show featured the lives of two FBI agents investigating paranormal activities?", answer: "'The X-Files' (1993-2002)" },
+        { question: "Which actor starred in both 'Friends' and 'Episodes'?", answer: "Matt LeBlanc" },
+        { question: "What was the name of the high school in 'Saved by the Bell'?", answer: "Bayside High" },
+        { question: "Which show followed the adventures of a boy named Cory Matthews?", answer: "'Boy Meets World' (1993-2000)" },
+        { question: "In 'Buffy the Vampire Slayer', what was the name of Buffy's best friend?", answer: "Willow Rosenberg" },
+        { question: "Who played the character of Jack Bauer in '24'?", answer: "Kiefer Sutherland" },
+        { question: "Which show featured characters living in a Seattle radio station?", answer: "'Frasier' (1993-2004)" },
+        { question: "What was the theme song for 'Dawson's Creek'?", answer: "'I Don't Want to Wait' by Paula Cole" },
+        { question: "Who played the character of Chandler Bing in 'Friends'?", answer: "Matthew Perry" },
+        { question: "Which 1990s show featured characters like Tommy Pickles and Angelica?", answer: "'Rugrats' (1991-2004)" },
+        { question: "Which 1990s teen drama starred Claire Danes as Angela Chase?", answer: "'My So-Called Life' (1994-1995)" },
+        { question: "Which 1990s sitcom featured a bar named 'Cheers'?", answer: "'Cheers' (1982-1993)" },
+        { question: "Who played the character of Steve Urkel in 'Family Matters'?", answer: "Jaleel White" },
+        { question: "What was the name of the talking baby in 'Family Guy'?", answer: "Stewie Griffin" },
+        { question: "Which 1990s medical drama starred Anthony Edwards and Noah Wyle?", answer: "'ER' (1994-2009)" },
+        { question: "Which show featured Sabrina Spellman as a teenage witch?", answer: "'Sabrina the Teenage Witch' (1996-2003)" },
+        { question: "In 'Friends', what is Joey's favorite food?", answer: "Sandwiches" },
+        { question: "What was the name of Will's best friend in 'The Fresh Prince of Bel-Air'?", answer: "Jazz" },
+        { question: "Which 1990s show starred Tiffani Thiessen as a popular high school student?", answer: "'Saved by the Bell' (1989-1993)" },
+        { question: "Which 1990s animated series featured a cat and dog as roommates?", answer: "'CatDog' (1998-2005)" },
+        { question: "In 'The Simpsons', what is the name of the bar Homer frequents?", answer: "Moe's Tavern" },
+        { question: "Who played the character of Ally McBeal?", answer: "Calista Flockhart" },
+        { question: "Which 1990s show followed the misadventures of a wealthy Beverly Hills family?", answer: "'Beverly Hills, 90210' (1990-2000)" }
+    ];
 
-        function getRandomQuestion() {
-            let newIndex;
-            do {
-                newIndex = Math.floor(Math.random() * questionsAndAnswers.length);
-            } while (newIndex === currentQuestionIndex);
-            currentQuestionIndex = newIndex;
-            return questionsAndAnswers[newIndex];
+    let currentQuestionIndex = 0;
+
+    // Shuffle the quiz data
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
+    }
 
-        document.getElementById('quizImage').addEventListener('click', function() {
-            const { question, answer } = getRandomQuestion();
-            document.getElementById('question').innerText = question;
-            document.getElementById('answer').innerText = answer;
-        });
-    </script>
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
 </body>
 </html>
